@@ -68,7 +68,7 @@ def main():
         hourly_news_job, 
         interval=3600, 
         first=10, 
-        chat_id="@news_pulse18_bot",
+        chat_id="@flashnews1810",
         name="channel_broadcast"
     )
 
