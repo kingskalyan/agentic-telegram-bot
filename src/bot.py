@@ -29,7 +29,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Process message through the Agent (which will use News tool internally if needed)
     reply_text = get_agent_response(user_id, user_message)
     
-    await update.message.reply_text(reply_text, parse_mode='Markdown')
+    try:
+        await update.message.reply_text(reply_text, parse_mode='Markdown')
+    except Exception as parse_error:
+        logger.warning("markdown_parse_failed", error=str(parse_error))
+        # Fall back to plain text if Telegram's strict Markdown parser crashes
+        await update.message.reply_text(reply_text)
 
 def main():
     if not settings.telegram_bot_token or settings.telegram_bot_token == "your_telegram_bot_token_here":
