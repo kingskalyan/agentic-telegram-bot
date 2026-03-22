@@ -11,12 +11,15 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = get_logger("bot")
 
+import datetime
+
 async def hourly_news_job(context: ContextTypes.DEFAULT_TYPE):
     chat_id = context.job.chat_id
     logger.info("running_hourly_job", chat_id=chat_id)
     
     # send_chat_action is invalid in Channels, removed for broadcast completely.
-    prompt = "Give me a quick bulleted summary of the 3 biggest news stories right now specifically related to Agentic AI, Autonomous AI Agents, and Artificial Intelligence progress."
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    prompt = f"It is exactly {current_time}. Give me a quick bulleted summary of the 3 most strictly recent, newest news stories right now specifically related to Agentic AI, Autonomous AI Agents, and Artificial Intelligence progress. Do not repeat old news."
     reply_text = get_agent_response(str(chat_id), prompt)
     
     try:
@@ -67,11 +70,11 @@ def main():
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    # Start the automated Channel Broadcast exactly 10 seconds after boot, then every hour
+    # Start the automated Channel Broadcast exactly 10 seconds after boot, then every 1 hour (3600 seconds)
     application.job_queue.run_repeating(
         hourly_news_job, 
-        interval=600, 
-        first=5, 
+        interval=3600, 
+        first=10, 
         chat_id="@flashnews1810",
         name="channel_broadcast"
     )
