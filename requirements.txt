@@ -1,0 +1,9 @@
+python-telegram-bot[job-queue]
+google-generativeai
+duckduckgo-search
+pydantic
+pydantic-settings
+structlog
+python-dotenv
+sqlalchemy
+pymysql

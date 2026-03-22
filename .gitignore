@@ -1,0 +1,10 @@
+# Ignore Python environments and cache
+venv/
+__pycache__/
+*.pyc
+
+# Ignore environment variables / API keys!
+.env
+
+# Ignore local databases
+*.db
