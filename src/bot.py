@@ -1,9 +1,13 @@
 import sys
+import logging
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 from src.config import settings
 from src.logger import get_logger
 from src.agent import get_agent_response
+
+# Suppress the continuous getUpdates spam from the underlying HTTP library
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = get_logger("bot")
 
@@ -30,7 +34,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for job in current_jobs:
         job.schedule_removal()
         
-    context.job_queue.run_repeating(hourly_news_job, interval=3600, first=10, chat_id=chat_id, name=str(chat_id))
+    context.job_queue.run_repeating(hourly_news_job, interval=30, first=10, chat_id=chat_id, name=str(chat_id))
     
     await update.message.reply_html(
         rf"Hi {user.mention_html()}! I am your Agentic AI News Assistant.\n\n<b>Hourly Broadcast Enabled:</b> I am now programmed to automatically fetch and send you the top 3 biggest news headlines every 1 hour!"
@@ -66,8 +70,8 @@ def main():
     # Start the automated Channel Broadcast exactly 10 seconds after boot, then every hour
     application.job_queue.run_repeating(
         hourly_news_job, 
-        interval=3600, 
-        first=10, 
+        interval=600, 
+        first=5, 
         chat_id="@flashnews1810",
         name="channel_broadcast"
     )
