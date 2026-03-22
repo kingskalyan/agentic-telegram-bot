@@ -19,7 +19,7 @@ async def hourly_news_job(context: ContextTypes.DEFAULT_TYPE):
     
     # send_chat_action is invalid in Channels, removed for broadcast completely.
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    prompt = f"It is exactly {current_time}. Give me a quick bulleted summary of the 3 most strictly recent, newest news stories right now specifically related to Agentic AI, Autonomous AI Agents, and Artificial Intelligence progress. WARNING: You MUST silently review your chat history first. Ensure NONE of your 3 new stories match the news you already broadcasted previously today. Only output completely new stories."
+    prompt = f"It is exactly {current_time}. Give me a quick bulleted summary of the 3 most strictly recent, newest major world news stories right now (e.g. global events, conflicts, breaking news). WARNING: You MUST silently review your chat history first. Ensure NONE of your 3 new stories match the news you already broadcasted previously today. Only output completely new stories."
     reply_text = get_agent_response(str(chat_id), prompt)
     
     try:
