@@ -20,8 +20,8 @@ def search_latest_news(query: str, max_results: int = 5) -> str:
     try:
         results = []
         with DDGS() as ddgs:
-            # Use DDG news search capabilities
-            ddgs_news_gen = ddgs.news(keywords=query, max_results=max_results)
+            # Use DDG news search capabilities, strictly limited to the past day ('d')
+            ddgs_news_gen = ddgs.news(keywords=query, max_results=max_results, timelimit='d')
             for r in ddgs_news_gen:
                 results.append({
                     "title": r.get('title', ''),
