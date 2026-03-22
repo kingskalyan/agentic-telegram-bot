@@ -19,7 +19,7 @@ async def hourly_news_job(context: ContextTypes.DEFAULT_TYPE):
     
     # send_chat_action is invalid in Channels, removed for broadcast completely.
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    prompt = f"It is exactly {current_time}. Give me a quick bulleted summary of the 3 most strictly recent, newest news stories right now specifically related to Agentic AI, Autonomous AI Agents, and Artificial Intelligence progress. Do not repeat old news."
+    prompt = f"It is exactly {current_time}. Give me a quick bulleted summary of the 3 most strictly recent, newest news stories right now specifically related to Agentic AI, Autonomous AI Agents, and Artificial Intelligence progress. WARNING: You MUST silently review your chat history first. Ensure NONE of your 3 new stories match the news you already broadcasted previously today. Only output completely new stories."
     reply_text = get_agent_response(str(chat_id), prompt)
     
     try:
@@ -37,10 +37,10 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for job in current_jobs:
         job.schedule_removal()
         
-    context.job_queue.run_repeating(hourly_news_job, interval=30, first=10, chat_id=chat_id, name=str(chat_id))
+    context.job_queue.run_repeating(hourly_news_job, interval=1800, first=10, chat_id=chat_id, name=str(chat_id))
     
     await update.message.reply_html(
-        rf"Hi {user.mention_html()}! I am your Agentic AI News Assistant.\n\n<b>Hourly Broadcast Enabled:</b> I am now programmed to automatically fetch and send you the top 3 biggest news headlines every 1 hour!"
+        rf"Hi {user.mention_html()}! I am your Agentic AI News Assistant.\n\n<b>Broadcaster Enabled:</b> I am now programmed to automatically fetch and send you the top 3 biggest news headlines every 30 minutes!"
     )
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -70,10 +70,10 @@ def main():
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    # Start the automated Channel Broadcast exactly 10 seconds after boot, then every 1 hour (3600 seconds)
+    # Start the automated Channel Broadcast exactly 10 seconds after boot, then every 30 minutes (1800 seconds)
     application.job_queue.run_repeating(
         hourly_news_job, 
-        interval=3600, 
+        interval=1800, 
         first=10, 
         chat_id="@flashnews1810",
         name="channel_broadcast"
