@@ -4,7 +4,7 @@ from src.logger import get_logger
 
 logger = get_logger("news_search")
 
-def search_latest_news(query: str, max_results: int = 5) -> str:
+def search_latest_news(query: str, max_results: int = 15) -> str:
     """
     Search the web for the latest news related to a given query.
     
